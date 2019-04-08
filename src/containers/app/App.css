@@ -1,0 +1,19 @@
+.App-header {
+  min-height: 20vh;
+  margin: 0 auto;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+
+.input-box {
+  font-weight: bold;
+}
+.text-italic {
+  font-style: italic;
+  font-size: 14px;
+}
+.full-width {
+  width: 100%;
+}

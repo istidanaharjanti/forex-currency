@@ -1,0 +1,21 @@
+.box-currency {
+  margin: 15px;
+  width: 100%;
+}
+.text-currency {
+  font-size: 24px;
+  font-weight: bold;
+}
+.text-currency.value {
+  text-align: right;
+}
+.text-static {
+  font-size: 12px;
+  font-style: italic;
+}
+.text-static.currency {
+  font-weight: bold;
+}
+p.text-static {
+  margin-bottom: 0 !important;
+}

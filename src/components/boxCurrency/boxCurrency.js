@@ -39,7 +39,7 @@ const BoxCurrency = ({ currency, result, currencyName, rate, children }) => (
   
   BoxCurrency.defaultProps = {
     currency: 'IDR',
-    result: '0',
+    result: 0,
     currencyName: 'IDR - Indonesian Rupiah',
     rate: 'IDR 14,410.45'
   };

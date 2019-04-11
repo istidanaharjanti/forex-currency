@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+
 import './App.css';
-import { Card, Container, Row, Col, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Card, Container, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
 
 import BoxCurrency from '../../components/boxCurrency/boxCurrency';
 import AddCurrency from '../../components/addCurrency/addCurrency';
-
 
 const dataCurrencies = [
   {
@@ -60,16 +61,46 @@ const dataCurrencies = [
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedCurrency: '',
+      currencyLists: [],
+      rateLists: {},
+    };
   };
 
-  _handleSelectCurrency(event){
-    console.log(event);
-    console.log(this.inputEl);
+  _handleSelectCurrency = (event) => {
+    this.setState({
+      selectedCurrency: event.target.value,
+    });
   };
 
-  _addOtherCurrency(event){
-    console.log(event);
+  _addOtherCurrency = () => {
+    const detailSelected = dataCurrencies.find(data => data.value === this.state.selectedCurrency);
+    const currencySelected = this.state.selectedCurrency;
+    const currencyItem = {
+      currency: currencySelected,
+      currencyName: detailSelected.detail,
+      rateSelected: this.state.rateLists[currencySelected],
+    }
+    const newArr = [];
+    newArr.push(currencyItem);
+    this.setState({
+      currencyLists: this.state.currencyLists.concat(newArr),
+    });
+  };
+
+  _handleDeleteCurrency = (index) => {
+    this.state.currencyLists.splice(index, 1);
+    this.setState({
+      currencyLists: this.state.currencyLists,
+    });
+  };
+
+  async componentDidMount() {
+    const { data: { rates } } = await axios.get('https://api.exchangeratesapi.io/latest?base=USD');
+    this.setState({
+      rateLists: rates,
+    });
   };
 
   render() {
@@ -89,15 +120,20 @@ class App extends Component {
               </Col>
             </Row>
             <hr style={{ margin: '0 -20px' }} />
-            <BoxCurrency>
-              <Button variant="outline-dark">
-                <i className="fa fa-trash"></i>
-              </Button>
-            </BoxCurrency>
+            {this.state.currencyLists.length > 0 &&
+              this.state.currencyLists.map((data, index) => (
+                <BoxCurrency
+                  currency={data.currency}
+                  currencyDetail={data.currencyName}
+                  rate={data.rateSelected}
+                  key={`${data.currency} - ${index}`}
+                  deleteButtonAction={ () => this._handleDeleteCurrency(index) }
+                />
+              ))
+            }
             <AddCurrency 
-              list={dataCurrencies} 
-              onSelectAction={this._handleSelectCurrency.bind(this)}
-              ref={el => this.inputEl=el}
+              list={dataCurrencies}
+              onSelectAction={this._handleSelectCurrency}
               addCurrencyButtonAction={this._addOtherCurrency}
             />
           </Card.Body>

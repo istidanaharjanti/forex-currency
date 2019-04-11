@@ -35,7 +35,7 @@ const BoxCurrency = ({ currency, result, currencyDetail, rate, deleteButtonActio
   
   BoxCurrency.propTypes = {
     currency: PropTypes.string,
-    result: PropTypes.number,
+    result: PropTypes.string,
     currencyDetail: PropTypes.string,
     rate: PropTypes.string,
     deleteButtonAction: PropTypes.func,
@@ -44,7 +44,7 @@ const BoxCurrency = ({ currency, result, currencyDetail, rate, deleteButtonActio
   BoxCurrency.defaultProps = {
     currency: '',
     currencyDetail: '',
-    result: 0,
+    result: '',
     rate: '',
     deleteButtonAction: noop,
   };

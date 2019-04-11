@@ -57,7 +57,8 @@ const dataCurrencies = [
     label: 'KRW',
     detail: 'South Korean Won',
   },
-]
+];
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -66,12 +67,14 @@ class App extends Component {
       currencyLists: [],
       rateLists: {},
       isDisabledOption: false,
+      inputValue: '10000',
     };
     this._handleDeleteCurrency.bind(this);
     this._handleSelectCurrency.bind(this);
     this._addOtherCurrency.bind(this);
     this._disablingOption.bind(this);
     this._currencyFormat.bind(this);
+    this._calculateRate.bind(this);
   };
 
   _handleSelectCurrency = (event) => {
@@ -102,6 +105,11 @@ class App extends Component {
     });
   };
 
+  _handleInputChange = (event) => {
+    const { value } = event.target;
+    this.setState({ inputValue: value })
+  };
+
   _disablingOption = () => {
     let disabled = false;
     if(this.state.currencyLists.length > 0) {
@@ -123,11 +131,20 @@ class App extends Component {
     const options = {
       style: 'currency',
       currency: name,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
+      currencyDisplay: 'code',
     };
     const format = new Intl.NumberFormat('id-ID', options).format(val);
     return format;
   }
+
+  _calculateRate = (name) => {
+    const inputtedVal = Number(this.state.inputValue);
+    const rate = this.state.rateLists[name].toFixed(2);
+    const result = inputtedVal * Number(rate);
+    const format = this._currencyFormat(name, result);
+    return format.slice(4);
+  };
 
   async componentDidMount() {
     const { data: { rates } } = await axios.get('https://api.exchangeratesapi.io/latest?base=USD');
@@ -148,7 +165,7 @@ class App extends Component {
                   <InputGroup.Prepend>
                     <InputGroup.Text>USD</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <FormControl defaultValue="10000" style={{textAlign: 'right'}} />
+                  <FormControl type="text" style={{textAlign: 'right'}} value={this.state.inputValue} onChange={this._handleInputChange}/>
                 </InputGroup>
               </Col>
             </Row>
@@ -157,6 +174,7 @@ class App extends Component {
               this.state.currencyLists.map((data, index) => (
                 <BoxCurrency
                   currency={data.currency}
+                  result={this._calculateRate(data.currency)}
                   currencyDetail={data.currencyName}
                   rate={this._currencyFormat(data.currency, data.rateSelected)}
                   key={`${data.currency} - ${index}`}
@@ -166,7 +184,6 @@ class App extends Component {
             }
             <AddCurrency
               list={dataCurrencies}
-              isDisabledOption={this._disablingOption()}
               onSelectAction={this._handleSelectCurrency}
               addCurrencyButtonAction={this._addOtherCurrency}
             />

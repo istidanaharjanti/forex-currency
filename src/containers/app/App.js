@@ -10,7 +10,8 @@ import AddCurrency from '../../components/addCurrency/addCurrency';
 const dataCurrencies = [
   {
     label: 'Add more currencies',
-    value: 0
+    value: '0',
+    detail: '0',
   },
   {
     value: 'USD',
@@ -110,19 +111,11 @@ class App extends Component {
     this.setState({ inputValue: value })
   };
 
-  _disablingOption = () => {
+  _disablingOption() {
     let disabled = false;
     if(this.state.currencyLists.length > 0) {
-      this.state.currencyLists.find(data => {
-        if(data.currency === this.state.selectedCurrency) {
-          console.log('nih')
-          disabled = true;
-        } else {
-          console.log('test')
-          disabled = false;
-        }
-        return disabled;
-      });
+        const isOptionSelected = this.state.currencyLists.find(data => data.currency === this.state.selectedCurrency);
+        disabled = typeof isOptionSelected !== 'undefined';
     }
     return disabled;
   };
@@ -169,7 +162,7 @@ class App extends Component {
                 </InputGroup>
               </Col>
             </Row>
-            <hr style={{ margin: '0 -20px' }} />
+            <hr style={{ margin: '0 -20px 10px' }} />
             {this.state.currencyLists.length > 0 &&
               this.state.currencyLists.map((data, index) => (
                 <BoxCurrency
@@ -184,8 +177,10 @@ class App extends Component {
             }
             <AddCurrency
               list={dataCurrencies}
+              currencyList={this.state.currencyLists}
               onSelectAction={this._handleSelectCurrency}
               addCurrencyButtonAction={this._addOtherCurrency}
+              isDisabledButtonAdd ={this.state.selectedCurrency === '' || this.state.selectedCurrency === '0' || this._disablingOption()}
             />
           </Card.Body>
         </Card>

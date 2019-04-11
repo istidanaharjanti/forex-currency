@@ -68,7 +68,7 @@ class App extends Component {
       currencyLists: [],
       rateLists: {},
       isDisabledOption: false,
-      inputValue: '10000',
+      inputValue: 10000,
     };
     this._handleDeleteCurrency.bind(this);
     this._handleSelectCurrency.bind(this);
@@ -132,7 +132,7 @@ class App extends Component {
   }
 
   _calculateRate = (name) => {
-    const inputtedVal = Number(this.state.inputValue);
+    const inputtedVal = this.state.inputValue;
     const rate = this.state.rateLists[name].toFixed(2);
     const result = inputtedVal * Number(rate);
     const format = this._currencyFormat(name, result);
@@ -158,7 +158,7 @@ class App extends Component {
                   <InputGroup.Prepend>
                     <InputGroup.Text>USD</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <FormControl type="text" style={{textAlign: 'right'}} value={this.state.inputValue} onChange={this._handleInputChange}/>
+                  <FormControl type="number" style={{textAlign: 'right'}} value={this.state.inputValue} onChange={this._handleInputChange}/>
                 </InputGroup>
               </Col>
             </Row>

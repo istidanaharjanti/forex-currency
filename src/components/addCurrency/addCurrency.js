@@ -15,7 +15,7 @@ const AddCurrency = ({
           <Form.Control as="select" onChange={onSelectAction}>
             {
               list.map((data, index) => (
-                <option key={index + data.label} value={data.value}>
+                <option key={index} value={data.value}>
                   {data.label}
                 </option>
               ))

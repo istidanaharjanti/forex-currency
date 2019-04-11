@@ -65,7 +65,13 @@ class App extends Component {
       selectedCurrency: '',
       currencyLists: [],
       rateLists: {},
+      isDisabledOption: false,
     };
+    this._handleDeleteCurrency.bind(this);
+    this._handleSelectCurrency.bind(this);
+    this._addOtherCurrency.bind(this);
+    this._disablingOption.bind(this);
+    this._currencyFormat.bind(this);
   };
 
   _handleSelectCurrency = (event) => {
@@ -96,6 +102,33 @@ class App extends Component {
     });
   };
 
+  _disablingOption = () => {
+    let disabled = false;
+    if(this.state.currencyLists.length > 0) {
+      this.state.currencyLists.find(data => {
+        if(data.currency === this.state.selectedCurrency) {
+          console.log('nih')
+          disabled = true;
+        } else {
+          console.log('test')
+          disabled = false;
+        }
+        return disabled;
+      });
+    }
+    return disabled;
+  };
+
+  _currencyFormat = (name, val) => {
+    const options = {
+      style: 'currency',
+      currency: name,
+      maximumFractionDigits: 2
+    };
+    const format = new Intl.NumberFormat('id-ID', options).format(val);
+    return format;
+  }
+
   async componentDidMount() {
     const { data: { rates } } = await axios.get('https://api.exchangeratesapi.io/latest?base=USD');
     this.setState({
@@ -125,14 +158,15 @@ class App extends Component {
                 <BoxCurrency
                   currency={data.currency}
                   currencyDetail={data.currencyName}
-                  rate={data.rateSelected}
+                  rate={this._currencyFormat(data.currency, data.rateSelected)}
                   key={`${data.currency} - ${index}`}
                   deleteButtonAction={ () => this._handleDeleteCurrency(index) }
                 />
               ))
             }
-            <AddCurrency 
+            <AddCurrency
               list={dataCurrencies}
+              isDisabledOption={this._disablingOption()}
               onSelectAction={this._handleSelectCurrency}
               addCurrencyButtonAction={this._addOtherCurrency}
             />

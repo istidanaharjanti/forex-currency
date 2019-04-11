@@ -3,14 +3,14 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import noop from 'lodash/noop';
 
-const AddCurrency = ({ list, buttonText, onSelectAction, addCurrencyButtonAction }) => (
+const AddCurrency = ({ list, buttonText, onSelectAction, addCurrencyButtonAction, isDisabledOption }) => (
     <Row>
       <Col md={8}>
         <Form.Group controlId="add-currency">
           <Form.Control as="select" onChange={onSelectAction}>
             {
               list.map((data, index) => (
-                <option key={index + data.label} value={data.value}>
+                <option key={index + data.label} value={data.value} disabled={isDisabledOption}>
                   {data.label}
                 </option>
               ))
@@ -32,6 +32,7 @@ AddCurrency.propTypes = {
   buttonText: PropTypes.string,
   onSelectAction: PropTypes.func,
   addCurrencyButtonAction: PropTypes.func,
+  isDisabledOption: PropTypes.bool,
 };
 
 AddCurrency.defaultProps = {
@@ -39,6 +40,7 @@ AddCurrency.defaultProps = {
   buttonText: 'Submit',
   onSelectAction: noop,
   addCurrencyButtonAction: noop,
+  isDisabledOption: false,
 };
 
 export default AddCurrency;

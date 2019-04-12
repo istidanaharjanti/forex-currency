@@ -37,4 +37,9 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-### Run Docker File
+## Run Docker File
+Run this command:
+```
+docker build -t <your_docker_image_name> .
+docker run -d --name <your_docker_name> -p 0.0.0.0:3000:3000 <your_docker_image_name>
+```

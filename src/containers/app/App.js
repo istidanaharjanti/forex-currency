@@ -9,8 +9,8 @@ import AddCurrency from '../../components/addCurrency/addCurrency';
 
 const dataCurrencies = [
   {
-    label: 'Add more currencies',
     value: '0',
+    label: 'Add more currencies',
     detail: '0',
   },
   {
@@ -87,11 +87,12 @@ class App extends Component {
   _addOtherCurrency = () => {
     const detailSelected = dataCurrencies.find(data => data.value === this.state.selectedCurrency);
     const currencySelected = this.state.selectedCurrency;
+    const rate = Object.keys(this.state.rateLists).length > 0 ? this.state.rateLists[currencySelected] : '';
     const currencyItem = {
       currency: currencySelected,
       currencyName: detailSelected.detail,
-      rateSelected: this.state.rateLists[currencySelected],
-    }
+      rateSelected: rate,
+    };
     const newArr = [];
     newArr.push(currencyItem);
     this.setState({
@@ -133,7 +134,7 @@ class App extends Component {
 
   _calculateRate = (name) => {
     const inputtedVal = this.state.inputValue;
-    const rate = this.state.rateLists[name].toFixed(2);
+    const rate = this.state.rateLists[name] && this.state.rateLists[name].toFixed(2);
     const result = inputtedVal * Number(rate);
     const format = this._currencyFormat(name, result);
     return format.slice(4);
